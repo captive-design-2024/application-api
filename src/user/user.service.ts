@@ -31,9 +31,9 @@ export class UserService {
   }
 
   async signup(dto: SignupDto) {
-    const findById: User = await this.findByLoginId(dto.login_id);
-    const findByEmail = await this.findByEmail(dto.email);
-    const findByPhone = await this.findByPhoneNumber(dto.phone_number);
+    const findById: User = await this.findByLoginId(dto.user_id);
+    const findByEmail = await this.findByEmail(dto.user_email);
+    const findByPhone = await this.findByPhoneNumber(dto.user_phone);
 
     if (findById) {
       throw new ConflictException('이미 존재하는 ID 입니다');
@@ -45,16 +45,16 @@ export class UserService {
       throw new ConflictException('이미 존재하는 전화번호 입니다');
     }
 
-    const encryptedPassword = await bcrypt.hash(dto.password, 10);
-    dto.password = encryptedPassword;
+    const encryptedPassword = await bcrypt.hash(dto.user_password, 10);
+    dto.user_password = encryptedPassword;
 
     await this.prismaService.user.create({
       data: {
-        login_id: dto.login_id,
-        password: dto.password,
-        email: dto.email,
-        user_name: dto.name,
-        phone_number: dto.phone_number,
+        login_id: dto.user_id,
+        password: dto.user_password,
+        email: dto.user_email,
+        user_name: dto.user_name,
+        phone_number: dto.user_phone,
       },
     });
   }

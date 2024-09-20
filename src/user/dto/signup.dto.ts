@@ -5,23 +5,23 @@ export class SignupDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  login_id: string;
+  user_id: string;
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  password: string;
+  user_password: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  user_name: string;
 
   @ApiProperty()
   @IsEmail()
   @IsNotEmpty()
-  email: string;
+  user_email: string;
 
   @ApiProperty()
   @IsNotEmpty()
-  name: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  phone_number: string;
+  user_phone: string;
 }
