@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { SigninDto } from '../user/dto';
+import { SigninDto } from '../user/dto/signin.dto';
 import { UserService } from '../user/user.service';
 import { User } from '@prisma/client';
 
@@ -24,12 +24,15 @@ export class AuthService {
   }
 
   async validateUser(dto: SigninDto): Promise<User> {
-    const user = await this.userService.findByLoginId(dto.login_id);
+    const user = await this.userService.findByLoginId(dto.user_id);
     if (!user) {
       throw new NotFoundException('존재하지 않는 ID 입니다');
     }
 
-    const isPasswordMatch = await bcrypt.compare(dto.password, user.password);
+    const isPasswordMatch = await bcrypt.compare(
+      dto.user_password,
+      user.password,
+    );
     if (!isPasswordMatch) {
       throw new UnauthorizedException('비밀번호가 맞지 않습니다');
     }
