@@ -20,53 +20,48 @@ model User {
   password     String
   email        String   @unique
   phone_number String   @unique
-  api_key      String?
   created_at   DateTime @default(now())
 
-  channels Channel?
-  advices  Advice[]
+  projects Project[]
 }
 
-model Channel {
-  id               String   @id @default(uuid())
-  user_id          String   @unique
-  channel_name     String
-  subscriber_count Int?
-  view_count       Int?
-  video_count      Int?
-  created_at       DateTime @default(now())
-  updated_at       DateTime @updatedAt
+model Project {
+  id        String   @id @default(uuid())
+  userId    String
+  link      String
+  createdAt DateTime @default(now())
 
-  user   User    @relation(fields: [user_id], references: [id])
-  videos Video[]
+  user    User     @relation(fields: [userId], references: [id])
+  caption Caption?
+  voice   Voice?
+  result  Result?
 }
 
-model Video {
-  id            String   @id @default(uuid())
-  channel_id    String   @unique
-  url           String
-  title         String
-  description   String
-  view_count    Int?
-  like_count    Int?
-  comment_count Int?
-  published_at  DateTime
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+model Caption {
+  id String  @id @default(uuid())
+  kr String
+  en String?
+  jp String?
 
-  channel Channel  @relation(fields: [channel_id], references: [id])
-  advices Advice[]
+  urlId    String  @unique
+  projects Project @relation(fields: [urlId], references: [id])
 }
 
-model Advice {
-  id         String   @id @default(uuid())
-  user_id    String
-  video_id   String
-  advice_str String
-  created_at DateTime @default(now())
+model Voice {
+  id      String  @id @default(uuid())
+  myVoice String
+  en      String?
+  jp      String?
 
-  user  User  @relation(fields: [user_id], references: [id])
-  video Video @relation(fields: [video_id], references: [id])
+  urlId    String  @unique
+  projects Project @relation(fields: [urlId], references: [id])
+}
 
-  @@unique([user_id, video_id])
+model Result {
+  id      String @id @default(uuid())
+  title   String
+  keyword String
+
+  urlId    String  @unique
+  projects Project @relation(fields: [urlId], references: [id])
 }
