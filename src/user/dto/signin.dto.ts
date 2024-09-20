@@ -5,10 +5,10 @@ export class SigninDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  login_id: string;
+  user_id: string;
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  password: string;
+  user_password: string;
 }
