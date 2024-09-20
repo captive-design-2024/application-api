@@ -55,10 +55,6 @@ export class UserService {
         email: dto.email,
         user_name: dto.name,
         phone_number: dto.phone_number,
-        api_key:
-          dto.api_key === undefined
-            ? this.configService.get('API_KEY')
-            : dto.api_key,
       },
     });
   }

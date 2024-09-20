@@ -24,8 +24,4 @@ export class SignupDto {
   @ApiProperty()
   @IsNotEmpty()
   phone_number: string;
-
-  @ApiProperty()
-  @IsOptional()
-  api_key: string;
 }
