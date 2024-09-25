@@ -4,10 +4,13 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { AuthController } from './auth/auth.controller';
+import { ProjectController } from './project/project.controller';
+import { ProjectService } from './project/project.service';
+import { ProjectModule } from './project/project.module';
 
 @Module({
-  imports: [AuthModule, UserModule],
-  controllers: [AppController, AuthController],
-  providers: [AppService],
+  imports: [AuthModule, UserModule, ProjectModule],
+  controllers: [AppController, AuthController, ProjectController],
+  providers: [AppService, ProjectService],
 })
 export class AppModule {}
