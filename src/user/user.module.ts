@@ -8,5 +8,6 @@ import { ConfigModule } from '@nestjs/config';
   controllers: [UserController],
   imports: [ConfigModule],
   providers: [UserService, PrismaService],
+  exports: [UserService],
 })
 export class UserModule {}
