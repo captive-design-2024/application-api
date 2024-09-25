@@ -10,15 +10,15 @@ export class ProjectService {
     private userService: UserService,
   ) {}
 
-  async saveProject(projectDto: ProjectDto, userId: string) {
+  async saveProject(dto:ProjectDto, userId: string) {
     //const video_link = this.extractVideoId(projectDto.project_url);
     const findUser = await this.userService.findByLoginId(userId);
 
     await this.prismaService.project.create({
       data: {
         userId: findUser.id,
-        link: projectDto.project_url,
-        name: projectDto.project_name,
+        link: dto.project_url,
+        name: dto.project_name,
       },
     });
   }
