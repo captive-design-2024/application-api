@@ -7,13 +7,13 @@ export class ProjectService {
   constructor(private prismaService: PrismaService) {}
 
   saveProject(projectDto: ProjectDto, userId: string) {
-    const video_link = this.extractVideoId(projectDto.link);
+    const video_link = this.extractVideoId(projectDto.project_url);
 
     this.prismaService.project.create({
       data: {
         userId: userId,
         link: video_link,
-        name: projectDto.name,
+        name: projectDto.project_name,
       },
     });
   }

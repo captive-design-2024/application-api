@@ -5,10 +5,10 @@ export class ProjectDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  link: string;
+  project_url: string;
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  name: string;
+  project_name: string;
 }
