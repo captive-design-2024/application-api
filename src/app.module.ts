@@ -7,10 +7,11 @@ import { AuthController } from './auth/auth.controller';
 import { ProjectController } from './project/project.controller';
 import { ProjectService } from './project/project.service';
 import { ProjectModule } from './project/project.module';
+import { PrismaService } from './prisma.service';
 
 @Module({
   imports: [AuthModule, UserModule, ProjectModule],
   controllers: [AppController, AuthController, ProjectController],
-  providers: [AppService, ProjectService],
+  providers: [AppService, ProjectService, PrismaService],
 })
 export class AppModule {}
