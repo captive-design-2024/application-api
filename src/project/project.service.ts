@@ -1,19 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { ProjectDto } from './dto/project.dto';
 import { PrismaService } from '../prisma.service';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class ProjectService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private userService: UserService,
+  ) {}
 
-  saveProject(projectDto: ProjectDto, userId: string) {
-    const video_link = this.extractVideoId(projectDto.project_url);
+  async saveProject(dto: ProjectDto, userId: string) {
+    //const video_link = this.extractVideoId(projectDto.project_url);
+    const findUser = await this.userService.findByLoginId(userId);
 
-    this.prismaService.project.create({
+    await this.prismaService.project.create({
       data: {
-        userId: userId,
-        link: video_link,
-        name: projectDto.project_name,
+        userId: findUser.id,
+        link: dto.project_url,
+        name: dto.project_title,
       },
     });
   }
