@@ -17,8 +17,8 @@ export class AppController {
 
   @Get('Mypage')
   @UseGuards(JwtAuthGuard)
-  sendNameAndEmail(@Req() req) {
+  async sendNameAndEmail(@Req() req) {
     const findUser = await this.userService.findByLoginId(req.user.id);
-    return [{name: findUser.user_name}, {email: findUser.email}]
+    return [{ name: findUser.user_name }, { email: findUser.email }]
   }
 }
