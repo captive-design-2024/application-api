@@ -22,11 +22,14 @@ export class ProjectController {
     this.projectService.saveProject(projectDto, userId);
   }
 
-  @Get('value')
+  @Get('title')
   @UseGuards(JwtAuthGuard)
   async sendTitles(@Req() req) {
     const findProjects = await this.projectService.findProjects(req.user.id);
-    return [{ title: findProjects.name }];
+    const number = findProjects.length;
+    for (let index = 0; index < number; index++) {
+      return [{ name: findProjects[index].name }];
+    }
   }
 
   @Delete()
