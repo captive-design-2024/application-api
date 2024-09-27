@@ -23,6 +23,18 @@ export class ProjectService {
     });
   }
 
+  async findProjects(id: string) {
+    return await this.prismaService.project.findMany({
+      where: {userId: id}
+    })
+  }
+
+  async deleteProject(title: string) {
+    this.prismaService.project.deleteMany({
+      where: {name: title}
+    })
+  }
+
   extractVideoId(url: string) {
     // 정규 표현식으로 유튜브 비디오 ID 추출
     const regex =
