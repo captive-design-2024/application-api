@@ -10,7 +10,7 @@ export class ProjectController {
   @Post()
   @UseGuards(JwtAuthGuard)
   async saveData(@Body() projectDto: ProjectDto, @Req() req) {
-    const userId = req.User.id;
+    const userId = req.user.id;
     this.projectService.saveProject(projectDto, userId);
   }
 }
