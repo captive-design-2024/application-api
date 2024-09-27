@@ -18,7 +18,7 @@ export class ProjectService {
       data: {
         userId: findUser.id,
         link: dto.project_url,
-        name: dto.project_name,
+        name: dto.project_title,
       },
     });
   }

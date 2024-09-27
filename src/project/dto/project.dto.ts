@@ -10,5 +10,5 @@ export class ProjectDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  project_name: string;
+  project_title: string;
 }
