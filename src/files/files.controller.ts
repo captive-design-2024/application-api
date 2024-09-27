@@ -1,16 +1,15 @@
 import { Controller, Get, Res } from '@nestjs/common';
 import { Response } from 'express';
+import { FilesService } from './files.service';
 
 @Controller('files')
 export class FilesController {
+  constructor(private readonly filesService: FilesService) {}
+
   @Get('test')
   downloadFile(@Res() res: Response) {
-    const filePath = '/usr/src/app/srt/test.srt'; // 절대 경로로 파일 설정
-    res.download(filePath, 'test.srt', (err) => {
-      if (err) {
-        console.error('File download error:', err);
-        res.status(500).send('Error downloading the file');
-      }
-    });
+    const filePath = '/usr/src/app/srt/test.srt';
+    const fileName = 'test.srt';
+    this.filesService.downloadFile(filePath, fileName, res);
   }
 }
