@@ -5,14 +5,12 @@ import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 
 @Controller('project')
 export class ProjectController {
-
   constructor(private readonly projectService: ProjectService) {}
 
   @Post()
   @UseGuards(JwtAuthGuard)
   async saveData(@Body() projectDto: ProjectDto, @Req() req) {
-    const userId = req.User.id;
+    const userId = req.user.id;
     this.projectService.saveProject(projectDto, userId);
   }
-
 }
