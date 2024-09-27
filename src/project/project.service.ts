@@ -26,6 +26,7 @@ export class ProjectService {
   async findProjects(id: string) {
     return await this.prismaService.project.findMany({
       where: { userId: id },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
