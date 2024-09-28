@@ -24,8 +24,9 @@ export class ProjectService {
   }
 
   async findProjects(id: string) {
+    const findUser = await this.userService.findByLoginId(id);
     return await this.prismaService.project.findMany({
-      where: { userId: id },
+      where: { userId: findUser.id },
       orderBy: { createdAt: 'desc' },
     });
   }
