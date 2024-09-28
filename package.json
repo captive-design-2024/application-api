@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "dr" : "yarn docker:restart",
+    "dr": "yarn docker:restart",
     "docker:up": "docker compose -f ./docker-compose.yaml up -d $1",
     "docker:down": "docker compose -f ./docker-compose.yaml down $1",
     "docker:restart": "yarn docker:down && docker image rm application-api-api && git pull && yarn docker:up",
