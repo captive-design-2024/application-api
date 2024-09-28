@@ -22,7 +22,7 @@ export class UserController {
 
   @Put()
   @UseGuards(JwtAuthGuard)
-  async updateUser(@Req() req, modifyDto: ModifyDto) {
+  async updateUser(@Req() req, @Body() modifyDto: ModifyDto) {
     await this.userService.updateUser(req.user.id, modifyDto)
   }
 }
