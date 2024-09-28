@@ -27,9 +27,8 @@ export class ProjectController {
   async sendTitles(@Req() req) {
     const findProjects = await this.projectService.findProjects(req.user.id);
     const number = findProjects.length;
-    for (let index = 0; index < number; index++) {
-      return [{ name: findProjects[index].name }];
-    }
+    const projectNames = findProjects.map( project => project.name );
+    return { number, projectNames };
   }
 
   @Delete()
