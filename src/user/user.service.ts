@@ -4,6 +4,7 @@ import { SignupDto } from './dto';
 import { User } from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
+import { ModifyDto } from './dto/modify.dto';
 
 @Injectable()
 export class UserService {
@@ -60,4 +61,41 @@ export class UserService {
   }
 
   // user update, delete
+  async updateUser(id: string, dto: ModifyDto) {
+    const findUser = await this.findByLoginId(id);
+    // 업데이트할 데이터를 저장할 객체를 선언
+    const updateData: any = {};
+
+    // dto의 필드가 null이 아닌 경우에만 updateData에 추가
+    if (dto.user_name !== null && dto.user_name !== undefined) {
+      updateData.user_name = dto.user_name;
+    }
+    if (dto.user_password !== null && dto.user_password !== undefined) {
+      updateData.user_password = await bcrypt.hash(dto.user_password, 10);
+    }
+    if (dto.user_email !== null && dto.user_email !== undefined) {
+      updateData.user_email = dto.user_email;
+    }
+    if (dto.user_phone !== null && dto.user_phone !== undefined) {
+      updateData.user_phone = dto.user_phone;
+    }
+
+    // 업데이트할 데이터가 있는 경우에만 PrismaService 호출
+    if (Object.keys(updateData).length > 0) {
+      try {
+        const updatedUser = await this.prismaService.user.update({
+          where: {
+            id: findUser.id, // 업데이트할 유저의 ID를 where 조건으로 사용
+          },
+          data: updateData,
+        });
+        return updatedUser;
+      } catch (error) {
+        throw new Error(`Failed to update user: ${error.message}`);
+      }
+    } else {
+      throw new Error('No data provided for update.');
+    }
+  }
+
 }
