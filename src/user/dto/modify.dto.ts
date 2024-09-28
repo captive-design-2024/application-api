@@ -4,7 +4,6 @@ import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 export class ModifyDto {
 
   @ApiProperty()
-  @IsNotEmpty()
   user_name: string;
 
   @ApiProperty()
