@@ -33,7 +33,8 @@ export class ProjectController {
   }
 
   @Delete()
-  async deleteProject(@Body('title') title: string) {
-    this.projectService.deleteProject(title);
+  @UseGuards(JwtAuthGuard)
+  async deleteProject(@Body('title') title: string, @Req() req) {
+    await this.projectService.deleteProject(title, req.user.id);
   }
 }
