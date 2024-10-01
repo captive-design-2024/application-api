@@ -19,7 +19,7 @@ export class FilesController {
     );
   }
 
-  @Get('readSRT')
+  @Post('readSRT')
   readSRT(@Body() dto: ReadSRTFileDto) {
     const { content_projectID, content_language } = dto;
     return this.filesService.readSRT(content_projectID, content_language);
