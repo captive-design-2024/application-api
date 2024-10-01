@@ -49,14 +49,11 @@ export class ProjectService {
   }
 
   extractVideoId(url: string) {
-    // 정규 표현식으로 유튜브 비디오 ID 추출
     const regex =
       /(?:youtube\.com\/(?:.*v=|v\/|embed\/|.*\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
 
-    // 정규 표현식으로 ID 추출 시도
     const match = url.match(regex);
 
-    // 추출된 ID 반환 또는 null 반환
     return match ? match[1] : null;
   }
 }

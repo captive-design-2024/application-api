@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Response } from 'express';
 import { PrismaService } from '../prisma.service';
-import * as fs from 'fs';
+import axios from 'axios';
 
 @Injectable()
 export class FilesService {
@@ -13,39 +13,64 @@ export class FilesService {
     language: string,
     res: Response,
   ) {
-    const validFormats = ['caption', 'voice'];
-    if (!validFormats.includes(format)) {
-      res.status(400).send('Invalid format specified');
-      return;
-    }
+    const workerURL = 'http://worker:4000/files/download';
+    try {
+      const model = this.prismaService[format];
+      const record = await model.findUnique({
+        where: { urlId: project_id },
+      });
 
-    const model = this.prismaService[format];
-    const record = await model.findUnique({
-      where: { urlId: project_id },
-    });
-
-    if (!record) {
-      res.status(404).send(`no data`);
-      return;
-    }
-
-    const filePath = record[language];
-    if (!filePath) {
-      res.status(404).send(`Language property '${language}' not found`);
-      return;
-    }
-    const fileName = `${project_id}-${format}-${language}.srt`;
-
-    if (!fs.existsSync(filePath)) {
-      res.status(404).send('File not found');
-      return;
-    }
-
-    res.download(filePath, fileName, (err) => {
-      if (err) {
-        console.error('File download error:', err);
-        res.status(500).send('Error downloading the file');
+      if (!record) {
+        throw new NotFoundException(
+          `No data found for project ID: ${project_id}`,
+        );
       }
-    });
+
+      const filePath = record[language];
+      if (!filePath) {
+        throw new NotFoundException(
+          `Language property '${language}' not found`,
+        );
+      }
+
+      const response = await axios.post(
+        workerURL,
+        { path: filePath },
+        { responseType: 'arraybuffer' },
+      );
+
+      res.set({
+        'Content-Type': 'application/octet-stream',
+        'Content-Disposition': `attachment; filename="downloaded_file.srt"`,
+      });
+      res.send(response.data);
+    } catch (error) {
+      console.error('Error in downloadFile:', error);
+      throw error;
+    }
+  }
+
+  async readSRT(project_id: string, language: string): Promise<string> {
+    const workerURL = 'http://worker:4000/files/read-srt';
+    try {
+      const record = await this.prismaService.caption.findUnique({
+        where: { urlId: project_id },
+      });
+
+      if (!record) {
+        throw new NotFoundException(
+          `No data found for project ID: ${project_id}`,
+        );
+      }
+
+      const filepath = record[language];
+
+      const response = await axios.post(workerURL, { path: filepath });
+
+      return response.data;
+    } catch (error) {
+      console.error('Error reading SRT file:', error);
+      throw new NotFoundException('Error reading SRT file');
+    }
   }
 }

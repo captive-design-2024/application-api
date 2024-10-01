@@ -60,13 +60,10 @@ export class UserService {
     });
   }
 
-  // user update, delete
   async updateUser(id: string, dto: ModifyDto) {
     const findUser = await this.findByLoginId(id);
-    // 업데이트할 데이터를 저장할 객체를 선언
     const updateData: any = {};
 
-    // dto의 필드가 null이 아닌 경우에만 updateData에 추가
     if (dto.user_name !== null && dto.user_name !== undefined) {
       updateData.user_name = dto.user_name;
     }
@@ -80,12 +77,11 @@ export class UserService {
       updateData.user_phone = dto.user_phone;
     }
 
-    // 업데이트할 데이터가 있는 경우에만 PrismaService 호출
     if (Object.keys(updateData).length > 0) {
       try {
         const updatedUser = await this.prismaService.user.update({
           where: {
-            id: findUser.id, // 업데이트할 유저의 ID를 where 조건으로 사용
+            id: findUser.id,
           },
           data: updateData,
         });
@@ -97,5 +93,4 @@ export class UserService {
       throw new Error('No data provided for update.');
     }
   }
-
 }

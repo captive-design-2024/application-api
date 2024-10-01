@@ -1,35 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
-import { lastValueFrom } from 'rxjs';
 import { PrismaService } from '../prisma.service';
-import {
-  genSubDto,
-  insertPathDto,
-  ContentFormat,
-  ContentLanguage,
-} from './dto/work.dto';
+import { insertPathDto, ContentFormat, ContentLanguage } from './dto/work.dto';
+import axios from 'axios';
 
 @Injectable()
 export class WorkService {
-  constructor(
-    private readonly httpService: HttpService,
-    private prismaService: PrismaService,
-  ) {}
+  constructor(private prismaService: PrismaService) {}
 
-  async generateSubtitle(dto: genSubDto): Promise<string> {
+  async generateSubtitle(
+    project_id: string,
+    video_url: string,
+  ): Promise<string> {
     const workerURL = 'http://worker:4000/generate-subtitle';
 
     try {
-      const response = await lastValueFrom(
-        this.httpService.post(
-          workerURL,
-          { url: dto.video_url },
-          { headers: { 'Content-Type': 'application/json' } },
-        ),
+      const response = await axios.post(
+        workerURL,
+        { url: video_url },
+        {
+          headers: { 'Content-Type': 'application/json' },
+        },
       );
 
       const insertDto: insertPathDto = {
-        content_projectID: dto.content_projectID,
+        content_projectID: project_id,
         content_format: ContentFormat.caption,
         content_language: ContentLanguage.kr,
         content_path: response.data,

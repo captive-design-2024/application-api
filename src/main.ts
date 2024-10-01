@@ -5,7 +5,6 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
 
-  // swagger
   const config = new DocumentBuilder()
     .setTitle('youtube subhelper API')
     .setDescription('API description')
