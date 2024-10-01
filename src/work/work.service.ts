@@ -29,6 +29,7 @@ export class WorkService {
     }
   }
 
+  /*
   async insertPath(dto: insertPathDto, path: string) {
     const project_id = dto.content_projectID;
     const format = dto.content_format;
@@ -39,7 +40,6 @@ export class WorkService {
       throw new Error('Invalid format specified');
     }
 
-    // Use a type assertion to specify the correct model type
     const model = this.prismaService[format] as
       | Prisma.CaptionDelegate<
           Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined
@@ -48,29 +48,27 @@ export class WorkService {
           Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined
         >;
 
-    // Check if a record with the given urlId already exists
     const existingRecord = await model.findUnique({
       where: { urlId: project_id },
     });
 
-    // If it exists, update the existing record
     if (existingRecord) {
       const updatedRecord = await model.update({
         where: { urlId: project_id },
         data: {
-          [language]: path, // Update the language-specific field
+          [language]: path,
         },
       });
-      return updatedRecord; // Return the updated record
+      return updatedRecord;
     } else {
-      // If it does not exist, create a new record
       const newRecord = await model.create({
         data: {
           urlId: project_id,
-          [language]: path, // Set the language-specific field
+          [language]: path,
         },
       });
-      return newRecord; // Return the newly created record
+      return newRecord;
     }
   }
+    */
 }
