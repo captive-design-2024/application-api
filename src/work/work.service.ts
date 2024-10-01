@@ -8,7 +8,7 @@ export class WorkService {
   constructor(private prismaService: PrismaService) {}
 
   async generateSubtitle(project_id: string): Promise<string> {
-    const workerURL = 'http://worker:4000/generate-subtitle';
+    const workerURL = 'http://host.docker.internal:4000/generate-subtitle';
 
     const record = await this.prismaService.project.findUnique({
       where: { id: project_id },
