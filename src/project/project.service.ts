@@ -24,15 +24,17 @@ export class ProjectService {
   }
 
   async findProjects(id: string) {
+    const findUser = await this.userService.findByLoginId(id);
     return await this.prismaService.project.findMany({
-      where: { userId: id },
+      where: { userId: findUser.id },
       orderBy: { createdAt: 'desc' },
     });
   }
 
-  async deleteProject(title: string) {
-    this.prismaService.project.deleteMany({
-      where: { name: title },
+  async deleteProject(title: string, userId: string) {
+    const findUser = await this.userService.findByLoginId(userId);
+    await this.prismaService.project.deleteMany({
+      where: { userId: findUser.id, name: title },
     });
   }
 
