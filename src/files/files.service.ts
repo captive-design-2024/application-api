@@ -51,7 +51,7 @@ export class FilesService {
   }
 
   async readSRT(project_id: string, language: string): Promise<string> {
-    const workerURL = 'http://worker:4000/files/read-srt';
+    const workerURL = 'http://worker:4000/files/readSrt';
     try {
       const record = await this.prismaService.caption.findUnique({
         where: { urlId: project_id },
