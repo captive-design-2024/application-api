@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { insertPathDto, ContentFormat, ContentLanguage } from './dto/work.dto';
 import axios from 'axios';
@@ -7,16 +7,21 @@ import axios from 'axios';
 export class WorkService {
   constructor(private prismaService: PrismaService) {}
 
-  async generateSubtitle(
-    project_id: string,
-    video_url: string,
-  ): Promise<string> {
+  async generateSubtitle(project_id: string): Promise<string> {
     const workerURL = 'http://worker:4000/generate-subtitle';
+
+    const record = await this.prismaService.project.findUnique({
+      where: { id: project_id },
+    });
+
+    if (!record) {
+      throw new NotFoundException(`Project with ID ${project_id} not found.`);
+    }
 
     try {
       const response = await axios.post(
         workerURL,
-        { url: video_url },
+        { url: record.link },
         {
           headers: { 'Content-Type': 'application/json' },
         },

@@ -17,11 +17,6 @@ export class genSubDto {
   @IsString()
   @IsNotEmpty()
   content_projectID: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  video_url: string;
 }
 
 export class insertPathDto {

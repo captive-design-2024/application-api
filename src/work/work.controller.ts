@@ -9,7 +9,7 @@ export class WorkController {
 
   @Post('generateSub')
   async generateSub(@Body() dto: genSubDto): Promise<void> {
-    const { content_projectID, video_url } = dto;
-    await this.workService.generateSubtitle(content_projectID, video_url);
+    const { content_projectID } = dto;
+    await this.workService.generateSubtitle(content_projectID);
   }
 }
