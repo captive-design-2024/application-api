@@ -9,9 +9,10 @@ import { ProjectService } from './project/project.service';
 import { ProjectModule } from './project/project.module';
 import { PrismaService } from './prisma.service';
 import { FilesModule } from './files/files.module';
+import { WorkModule } from './work/work.module';
 
 @Module({
-  imports: [AuthModule, UserModule, ProjectModule, FilesModule],
+  imports: [AuthModule, UserModule, ProjectModule, FilesModule, WorkModule],
   controllers: [AppController, AuthController, ProjectController],
   providers: [AppService, ProjectService, PrismaService],
 })
