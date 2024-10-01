@@ -2,7 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
 import { PrismaService } from '../prisma.service';
-import { genSubDto, insertPathDto } from './dto/work.dto';
+import {
+  genSubDto,
+  insertPathDto,
+  ContentFormat,
+  ContentLanguage,
+} from './dto/work.dto';
 
 @Injectable()
 export class WorkService {
@@ -13,6 +18,7 @@ export class WorkService {
 
   async generateSubtitle(dto: genSubDto): Promise<string> {
     const workerURL = 'http://worker:4000/generate-subtitle';
+
     try {
       const response = await lastValueFrom(
         this.httpService.post(
@@ -21,54 +27,62 @@ export class WorkService {
           { headers: { 'Content-Type': 'application/json' } },
         ),
       );
+
+      const insertDto: insertPathDto = {
+        content_projectID: dto.content_projectID,
+        content_format: ContentFormat.caption,
+        content_language: ContentLanguage.kr,
+        content_path: response.data,
+      };
+
+      await this.insertPath(insertDto);
+
       return response.data;
     } catch (error) {
-      // 에러 응답 데이터도 포함하여 문제 파악을 용이하게 만듦
       const errorMessage = error.response?.data?.message || error.message;
-      throw new Error(`Failed to generate subtitle: ${errorMessage}`);
+      throw new Error(`Failed to generateSubtitle: ${errorMessage}`);
     }
   }
 
-  /*
-  async insertPath(dto: insertPathDto, path: string) {
-    const project_id = dto.content_projectID;
-    const format = dto.content_format;
-    const language = dto.content_language;
+  async insertPath(dto: insertPathDto) {
+    const {
+      content_projectID,
+      content_format,
+      content_language,
+      content_path,
+    } = dto;
 
-    const validFormats = ['caption', 'voice'];
-    if (!validFormats.includes(format)) {
-      throw new Error('Invalid format specified');
+    let model;
+    const data: { [key: string]: string } = {};
+
+    switch (content_format) {
+      case ContentFormat.caption:
+        model = this.prismaService.caption;
+        data[content_language] = content_path;
+        break;
+
+      case ContentFormat.voice:
+        model = this.prismaService.voice;
+        data[content_language] = content_path;
+        break;
+
+      default:
+        throw new Error(`Unsupported format: ${content_format}`);
     }
 
-    const model = this.prismaService[format] as
-      | Prisma.CaptionDelegate<
-          Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined
-        >
-      | Prisma.VoiceDelegate<
-          Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined
-        >;
-
-    const existingRecord = await model.findUnique({
-      where: { urlId: project_id },
-    });
-
-    if (existingRecord) {
-      const updatedRecord = await model.update({
-        where: { urlId: project_id },
-        data: {
-          [language]: path,
+    try {
+      const record = await model.upsert({
+        where: { urlId: content_projectID },
+        update: data,
+        create: {
+          urlId: content_projectID,
+          ...data,
         },
       });
-      return updatedRecord;
-    } else {
-      const newRecord = await model.create({
-        data: {
-          urlId: project_id,
-          [language]: path,
-        },
-      });
-      return newRecord;
+
+      return record;
+    } catch (error) {
+      throw new Error(`insertPath error: ${error.message}`);
     }
   }
-    */
 }

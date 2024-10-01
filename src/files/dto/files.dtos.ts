@@ -2,14 +2,14 @@ import { IsNotEmpty, IsEnum, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export enum ContentFormat {
-  CAPTION = 'caption',
-  VOICE = 'voice',
+  caption = 'caption',
+  voice = 'voice',
 }
 
 export enum ContentLanguage {
-  KOREAN = 'ko',
-  ENGLISH = 'en',
-  JAPANESE = 'jp',
+  kr = 'kr',
+  en = 'en',
+  jp = 'jp',
 }
 
 export class DownloadFileDto {

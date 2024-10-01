@@ -2,17 +2,22 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsEnum } from 'class-validator';
 
 export enum ContentFormat {
-  CAPTION = 'caption',
-  VOICE = 'voice',
+  caption = 'caption',
+  voice = 'voice',
 }
 
 export enum ContentLanguage {
-  KOREAN = 'ko',
-  ENGLISH = 'en',
-  JAPANESE = 'jp',
+  kr = 'kr',
+  en = 'en',
+  jp = 'jp',
 }
 
 export class genSubDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  content_projectID: string;
+
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
@@ -34,4 +39,9 @@ export class insertPathDto {
   @IsEnum(ContentLanguage)
   @IsNotEmpty()
   content_language: ContentLanguage;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  content_path: string;
 }
