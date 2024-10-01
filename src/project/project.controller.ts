@@ -37,4 +37,9 @@ export class ProjectController {
   async deleteProject(@Body('title') title: string, @Req() req) {
     await this.projectService.deleteProject(title, req.user.id);
   }
+
+  @Post('srt')
+  async getSRT(@Body() projectId: string) {
+    return await this.projectService.getSRT(projectId);
+  }
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ProjectDto } from './dto/project.dto';
 import { PrismaService } from '../prisma.service';
 import { UserService } from '../user/user.service';
+import { fsReadFile } from "ts-loader/dist/utils";
 
 @Injectable()
 export class ProjectService {
@@ -36,6 +37,15 @@ export class ProjectService {
     await this.prismaService.project.deleteMany({
       where: { userId: findUser.id, name: title },
     });
+  }
+
+  async getSRT(projectId: string) {
+    const findProject = await this.prismaService.project.findUnique({
+      where: { id: projectId },
+      include: { caption: true}
+    });
+    const filepath = findProject.caption.kr;
+    return fsReadFile(filepath, "utf-8");
   }
 
   extractVideoId(url: string) {
