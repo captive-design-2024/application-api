@@ -50,8 +50,8 @@ export class FilesService {
     }
   }
 
-  async readSRT(project_id: string, language: string): Promise<string> {
-    const workerURL = 'http://host.docker.internal:4000/files/readSrt';
+  async readSRTpath(project_id: string, language: string): Promise<string> {
+    // const workerURL = 'http://localhost:4000/files/readSrt';
     try {
       const record = await this.prismaService.caption.findUnique({
         where: { urlId: project_id },
@@ -65,9 +65,9 @@ export class FilesService {
 
       const filepath = record[language];
 
-      const response = await axios.post(workerURL, { path: filepath });
+      // const response = await axios.post(workerURL, { path: filepath });
 
-      return response.data;
+      return filepath;
     } catch (error) {
       console.error('Error reading SRT file:', error);
       throw new NotFoundException('Error reading SRT file');
