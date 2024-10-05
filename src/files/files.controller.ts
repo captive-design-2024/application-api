@@ -22,6 +22,12 @@ export class FilesController {
   @Post('readSRT')
   readSRT(@Body() dto: ReadSRTFileDto) {
     const { content_projectID, content_language } = dto;
+    return this.filesService.readSRT(content_projectID, content_language);
+  }
+
+  @Post('readSRTpath')
+  readSRTpah(@Body() dto: ReadSRTFileDto) {
+    const { content_projectID, content_language } = dto;
     return this.filesService.readSRTpath(content_projectID, content_language);
   }
 

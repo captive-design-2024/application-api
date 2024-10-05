@@ -50,8 +50,8 @@ export class FilesService {
     }
   }
 
-  async readSRTpath(project_id: string, language: string): Promise<string> {
-    // const workerURL = 'http://localhost:4000/files/readSrt';
+  async readSRT(project_id: string, language: string): Promise<string> {
+    const workerURL = 'http://localhost:4000/files/readSrt';
     try {
       const record = await this.prismaService.caption.findUnique({
         where: { urlId: project_id },
@@ -65,7 +65,29 @@ export class FilesService {
 
       const filepath = record[language];
 
-      // const response = await axios.post(workerURL, { path: filepath });
+      const response = await axios.post(workerURL, { path: filepath });
+
+      return response.data;
+    } catch (error) {
+      console.error('Error reading SRT file:', error);
+      throw new NotFoundException('Error reading SRT file');
+    }
+  }
+
+  async readSRTpath(project_id: string, language: string): Promise<string> {
+    try {
+      const record = await this.prismaService.caption.findUnique({
+        where: { urlId: project_id },
+      });
+
+      if (!record) {
+        throw new NotFoundException(
+          `No data found for project ID: ${project_id}`,
+        );
+      }
+
+      const filepath = record[language];
+
 
       return filepath;
     } catch (error) {
