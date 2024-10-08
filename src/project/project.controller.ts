@@ -44,7 +44,6 @@ export class ProjectController2 {
   constructor(private readonly projectService: ProjectService) {}
 
   @Get('Edit/:id')
-  @UseGuards(JwtAuthGuard)
   async getLink(@Param('id') id: string) {
     const response = await this.projectService.findLinkByProjectId(id);
     const videoId = this.projectService.extractVideoId(response);
