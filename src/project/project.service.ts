@@ -46,4 +46,11 @@ export class ProjectService {
 
     return match ? match[1] : null;
   }
+
+  async findLinkByProjectId(id: string) {
+    const project = await this.prismaService.project.findUnique({
+      where: { id: id }
+    });
+    return project.link;
+  }
 }

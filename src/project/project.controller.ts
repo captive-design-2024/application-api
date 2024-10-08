@@ -5,8 +5,8 @@ import {
   UseGuards,
   Body,
   Get,
-  Delete,
-} from '@nestjs/common';
+  Delete, Param
+} from "@nestjs/common";
 import { ProjectDto } from './dto/project.dto';
 import { ProjectService } from './project.service';
 import { JwtAuthGuard } from '../auth/guard/jwt.guard';
@@ -36,5 +36,16 @@ export class ProjectController {
   @UseGuards(JwtAuthGuard)
   async deleteProject(@Body('title') title: string, @Req() req) {
     await this.projectService.deleteProject(title, req.user.id);
+  }
+}
+
+@Controller('Edit')
+export class ProjectController2 {
+  constructor(private readonly projectService: ProjectService) {}
+
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  async getLink(@Param('id') id: string) {
+    return await this.projectService.findLinkByProjectId(id);
   }
 }
