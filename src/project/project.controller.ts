@@ -39,13 +39,15 @@ export class ProjectController {
   }
 }
 
-@Controller('Edit')
+@Controller()
 export class ProjectController2 {
   constructor(private readonly projectService: ProjectService) {}
 
-  @Get(':id')
+  @Get('Edit/:id')
   @UseGuards(JwtAuthGuard)
   async getLink(@Param('id') id: string) {
-    return await this.projectService.findLinkByProjectId(id);
+    const response = await this.projectService.findLinkByProjectId(id);
+    const videoId = this.projectService.extractVideoId(response);
+    return 'www.youtube.com/embed/' + videoId;
   }
 }
