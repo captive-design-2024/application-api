@@ -48,6 +48,6 @@ export class ProjectController2 {
   async getLink(@Param('id') id: string) {
     const response = await this.projectService.findLinkByProjectId(id);
     const videoId = this.projectService.extractVideoId(response);
-    return 'www.youtube.com/embed/' + videoId;
+    return 'https://youtube.com/embed/' + videoId;
   }
 }
