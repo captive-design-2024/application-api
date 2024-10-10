@@ -10,6 +10,7 @@ import {
 import { ProjectDto } from './dto/project.dto';
 import { ProjectService } from './project.service';
 import { JwtAuthGuard } from '../auth/guard/jwt.guard';
+import { FilesService } from "../files/files.service";
 
 @Controller('project')
 export class ProjectController {
@@ -41,12 +42,19 @@ export class ProjectController {
 
 @Controller()
 export class ProjectController2 {
-  constructor(private readonly projectService: ProjectService) {}
+  constructor(private readonly projectService: ProjectService,
+              private readonly fileService: FilesService) {}
 
   @Get('Edit/:id')
+  @UseGuards(JwtAuthGuard)
   async getLink(@Param('id') id: string) {
     const response = await this.projectService.findLinkByProjectId(id);
     const videoId = this.projectService.extractVideoId(response);
-    return 'https://youtube.com/embed/' + videoId;
+
+    const srt = await this.fileService.readSRTforHome(id, 'kr');
+    return {
+      link: 'https://youtube.com/embed/' + videoId,
+      caption: srt
+    };
   }
 }

@@ -95,4 +95,26 @@ export class FilesService {
       throw new NotFoundException('Error reading SRT file');
     }
   }
+
+  async readSRTforHome(project_id: string, language: string): Promise<string> {
+    const workerURL = 'http://host.docker.internal:4000/files/readSrt';
+    try {
+      const record = await this.prismaService.caption.findUnique({
+        where: { urlId: project_id },
+      });
+
+      if (!record) {
+        return '자막을 생성해 주세요';
+      }
+
+      const filepath = record[language];
+
+      const response = await axios.post(workerURL, { path: filepath });
+
+      return response.data;
+    } catch (error) {
+      console.error('Error reading SRT file:', error);
+      throw new NotFoundException('Error reading SRT file');
+    }
+  }
 }
