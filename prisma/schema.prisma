@@ -45,7 +45,7 @@ model Caption {
   jp String?
 
   urlId    String  @unique
-  projects Project @relation(fields: [urlId], references: [id])
+  projects Project @relation(fields: [urlId], references: [id], onDelete: Cascade)
 }
 
 model Voice {
