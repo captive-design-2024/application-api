@@ -56,9 +56,10 @@ export class FilesService {
       where: { urlId: id }
     });
     const krPath = findCaption.kr;
-    return await axios.post(
+    const response = await axios.post(
       workerURL,
-      {path: krPath, content: content})
+      {path: krPath, content: content});
+    return response.data;
   }
 
   async readSRT(project_id: string, language: string): Promise<string> {
