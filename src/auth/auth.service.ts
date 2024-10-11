@@ -21,7 +21,7 @@ export class AuthService {
     this.oauth2Client = new google.auth.OAuth2(
       this.configService.get('GOOGLE_CLIENT_ID'),
       this.configService.get('CLIENT_SECRET'),
-      this.configService.get('REDIRECT_URL'),
+      'http://localhost:3000/auth/google'
     );
   }
 

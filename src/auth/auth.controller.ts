@@ -37,7 +37,7 @@ export class AuthController {
 
   //redirect URI
   @Get('auth/google')
-  @Redirect('http://localhost:3000')
+  @Redirect('http://localhost:3000/Mypage')
   async getCode(@Query('code') code: string) {
     if (code.includes("%2F")) {
       code = code.replace(/%2F/g, '/');
