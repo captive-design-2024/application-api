@@ -12,3 +12,8 @@ export class SigninDto {
   @IsNotEmpty()
   user_password: string;
 }
+
+export class GoogleToken{
+  static accessToken: string;
+  static refreshToken: string;
+}

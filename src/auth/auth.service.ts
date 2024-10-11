@@ -8,13 +8,22 @@ import * as bcrypt from 'bcrypt';
 import { SigninDto } from '../user/dto/signin.dto';
 import { UserService } from '../user/user.service';
 import { User } from '@prisma/client';
+import { google } from 'googleapis';
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
-  ) {}
+    private configService: ConfigService,
+  ) {
+    this.oauth2Client = new google.auth.OAuth2(
+      this.configService.get('GOOGLE_CLIENT_ID'),
+      this.configService.get('CLIENT_SECRET'),
+      this.configService.get('REDIRECT_URL'),
+    );
+  }
 
   async login(dto: SigninDto) {
     const user = await this.validateUser(dto);
@@ -49,5 +58,30 @@ export class AuthService {
     const accessToken = await this.jwtService.signAsync(payload);
 
     return accessToken;
+  }
+
+
+  //google api
+  private oauth2Client;
+
+  generateAuthUrl() {
+    return this.oauth2Client.generateAuthUrl({
+      access_type: 'offline',
+      scope: 'https://www.googleapis.com/auth/youtube.force-ssl'
+    });
+  }
+
+  setCredentials(tokens: any) {
+    this.oauth2Client.setCredentials(tokens);
+  }
+
+  getClient() {
+    return this.oauth2Client;
+  }
+
+  async getToken(code: string) {
+    const { tokens } = await this.oauth2Client.getToken(code);
+    this.setCredentials(tokens);
+    return tokens;
   }
 }
