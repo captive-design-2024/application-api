@@ -50,6 +50,17 @@ export class FilesService {
     }
   }
 
+  async updateFile(id: string, content: string) {
+    const workerURL = 'http://host.docker.internal:4000/files/updateSrt';
+    const findCaption = await this.prismaService.caption.findUnique({
+      where: { urlId: id }
+    });
+    const krPath = findCaption.kr;
+    return await axios.post(
+      workerURL,
+      {path: krPath, content: content})
+  }
+
   async readSRT(project_id: string, language: string): Promise<string> {
     const workerURL = 'http://host.docker.internal:4000/files/readSrt';
     try {

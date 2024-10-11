@@ -19,6 +19,11 @@ export class FilesController {
     );
   }
 
+  @Post('update')
+  updateFile(@Body('id') id: string, @Body('content') content: string) {
+    return this.filesService.updateFile(id, content);
+  }
+
   @Post('readSRT')
   readSRT(@Body() dto: ReadSRTFileDto) {
     const { content_projectID, content_language } = dto;
