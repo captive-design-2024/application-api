@@ -116,7 +116,9 @@ export class FilesService {
       });
 
       if (!record) {
-        return '자막을 생성해 주세요';
+        return `1
+00:00:00,000 --> 00:00:01,000
+자막을 입력해 주세요`;
       }
 
       const filepath = record[language];
