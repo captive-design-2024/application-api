@@ -49,4 +49,12 @@ export class AuthController {
     console.log('--------------------------------');
     console.log(GoogleToken.refreshToken);
   }
+
+  @Get('token')
+  async returnToken() {
+    if (GoogleToken.accessToken == null) {
+      return Error('Token not found');
+    }
+    return { access: GoogleToken.accessToken, refresh: GoogleToken.refreshToken };
+  }
 }
