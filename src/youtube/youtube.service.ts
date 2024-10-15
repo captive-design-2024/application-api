@@ -25,8 +25,8 @@ export class YoutubeService {
         }
       },
       media: {
-        mimeType: 'application/octet-stream',
-        body: fs.createReadStream(captionFilePath),
+        mimeType: 'text/plain',
+        body: captionFilePath,
       }
     });
 
