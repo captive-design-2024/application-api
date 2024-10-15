@@ -53,4 +53,11 @@ export class ProjectService {
     });
     return project.link;
   }
+
+  async findPureLinkByProjectId(id: string) {
+    const project = await this.prismaService.project.findUnique({
+      where: { id: id }
+    });
+    return this.extractVideoId(project.link);
+  }
 }

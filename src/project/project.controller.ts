@@ -38,6 +38,11 @@ export class ProjectController {
   async deleteProject(@Body('title') title: string, @Req() req) {
     await this.projectService.deleteProject(title, req.user.id);
   }
+
+  @Post('pureLink')
+  async getPureLink(@Body('id') id: string) {
+    return await this.projectService.findPureLinkByProjectId(id);
+  }
 }
 
 @Controller()
