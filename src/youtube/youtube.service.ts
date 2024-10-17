@@ -32,4 +32,26 @@ export class YoutubeService {
 
     return response.data;
   }
+
+  async updateCaption( id: string, captionFilePath: string ) {
+    const response = await this.youtube.captions.update({
+      part: 'snippet',
+      requestBody: {
+        id: id
+      },
+      media: {
+        mimeType: 'text/plain',
+        body: captionFilePath,
+      }
+    });
+    return response.data;
+  }
+
+  async listCaption(videoId: string) {
+    const response = await this.youtube.captions.list({
+      part: 'snippet',
+      videoId: videoId,
+    });
+    return response.data;
+  }
 }
