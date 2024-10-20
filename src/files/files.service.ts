@@ -53,12 +53,13 @@ export class FilesService {
   async updateFile(id: string, content: string) {
     const workerURL = 'http://host.docker.internal:4000/files/updateSrt';
     const findCaption = await this.prismaService.caption.findUnique({
-      where: { urlId: id }
+      where: { urlId: id },
     });
     const krPath = findCaption.kr;
-    const response = await axios.post(
-      workerURL,
-      {path: krPath, content: content});
+    const response = await axios.post(workerURL, {
+      path: krPath,
+      content: content,
+    });
     return response.data;
   }
 
@@ -99,7 +100,6 @@ export class FilesService {
       }
 
       const filepath = record[language];
-
 
       return filepath;
     } catch (error) {

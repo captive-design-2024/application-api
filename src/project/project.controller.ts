@@ -5,12 +5,13 @@ import {
   UseGuards,
   Body,
   Get,
-  Delete, Param
-} from "@nestjs/common";
+  Delete,
+  Param,
+} from '@nestjs/common';
 import { ProjectDto } from './dto/project.dto';
 import { ProjectService } from './project.service';
 import { JwtAuthGuard } from '../auth/guard/jwt.guard';
-import { FilesService } from "../files/files.service";
+import { FilesService } from '../files/files.service';
 
 @Controller('project')
 export class ProjectController {
@@ -47,8 +48,10 @@ export class ProjectController {
 
 @Controller()
 export class ProjectController2 {
-  constructor(private readonly projectService: ProjectService,
-              private readonly fileService: FilesService) {}
+  constructor(
+    private readonly projectService: ProjectService,
+    private readonly fileService: FilesService,
+  ) {}
 
   @Get('Edit/:id')
   @UseGuards(JwtAuthGuard)
@@ -59,7 +62,7 @@ export class ProjectController2 {
     const srt = await this.fileService.readSRTforHome(id, 'kr');
     return {
       link: 'https://youtube.com/embed/' + videoId,
-      caption: srt
+      caption: srt,
     };
   }
 }

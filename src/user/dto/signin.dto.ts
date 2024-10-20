@@ -13,7 +13,7 @@ export class SigninDto {
   user_password: string;
 }
 
-export class GoogleToken{
+export class GoogleToken {
   static accessToken: string;
   static refreshToken: string;
 }

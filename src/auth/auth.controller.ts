@@ -4,12 +4,14 @@ import {
   Request,
   Post,
   UseGuards,
-  Body, Redirect, Query
-} from "@nestjs/common";
+  Body,
+  Redirect,
+  Query,
+} from '@nestjs/common';
 import { JwtAuthGuard } from './guard/jwt.guard';
 import { AuthService } from './auth.service';
 import { SigninDto } from '../user/dto/signin.dto';
-import { GoogleToken } from "../user/dto";
+import { GoogleToken } from '../user/dto';
 
 @Controller()
 export class AuthController {
@@ -26,7 +28,6 @@ export class AuthController {
     return req.user;
   }
 
-
   //google api
   @Get('auth')
   @Redirect()
@@ -39,7 +40,7 @@ export class AuthController {
   @Get('auth/google')
   @Redirect('http://localhost:3000/Mypage')
   async getCode(@Query('code') code: string) {
-    if (code.includes("%2F")) {
+    if (code.includes('%2F')) {
       code = code.replace(/%2F/g, '/');
     }
     const tokens = await this.authService.getToken(code);
@@ -55,6 +56,9 @@ export class AuthController {
     if (GoogleToken.accessToken == null) {
       return Error('Token not found');
     }
-    return { access: GoogleToken.accessToken, refresh: GoogleToken.refreshToken };
+    return {
+      access: GoogleToken.accessToken,
+      refresh: GoogleToken.refreshToken,
+    };
   }
 }

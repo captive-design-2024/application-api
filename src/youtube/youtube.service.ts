@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
-const fs = require('fs');
-const {google} = require('googleapis');
-import { AuthService } from "../auth/auth.service";
+import { google } from 'googleapis';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class YoutubeService {
@@ -14,7 +13,11 @@ export class YoutubeService {
     });
   }
 
-  async insertCaption( videoId: string, language: string, captionFilePath: string ) {
+  async insertCaption(
+    videoId: string,
+    language: string,
+    captionFilePath: string,
+  ) {
     const response = await this.youtube.captions.insert({
       part: 'snippet',
       requestBody: {
@@ -22,27 +25,27 @@ export class YoutubeService {
           videoId: videoId,
           language: language,
           name: 'Korean Caption',
-        }
+        },
       },
       media: {
         mimeType: 'text/plain',
         body: captionFilePath,
-      }
+      },
     });
 
     return response.data;
   }
 
-  async updateCaption( id: string, captionFilePath: string ) {
+  async updateCaption(id: string, captionFilePath: string) {
     const response = await this.youtube.captions.update({
       part: 'snippet',
       requestBody: {
-        id: id
+        id: id,
       },
       media: {
         mimeType: 'text/plain',
         body: captionFilePath,
-      }
+      },
     });
     return response.data;
   }

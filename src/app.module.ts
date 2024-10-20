@@ -13,7 +13,14 @@ import { WorkModule } from './work/work.module';
 import { YoutubeModule } from './youtube/youtube.module';
 
 @Module({
-  imports: [AuthModule, UserModule, ProjectModule, FilesModule, WorkModule, YoutubeModule],
+  imports: [
+    AuthModule,
+    UserModule,
+    ProjectModule,
+    FilesModule,
+    WorkModule,
+    YoutubeModule,
+  ],
   controllers: [AppController, AuthController, ProjectController],
   providers: [AppService, ProjectService, PrismaService],
 })

@@ -9,7 +9,7 @@ import { SigninDto } from '../user/dto/signin.dto';
 import { UserService } from '../user/user.service';
 import { User } from '@prisma/client';
 import { google } from 'googleapis';
-import { ConfigService } from "@nestjs/config";
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +21,7 @@ export class AuthService {
     this.oauth2Client = new google.auth.OAuth2(
       this.configService.get('GOOGLE_CLIENT_ID'),
       this.configService.get('CLIENT_SECRET'),
-      'http://localhost:3000/auth/google'
+      'http://localhost:3000/auth/google',
     );
   }
 
@@ -60,14 +60,13 @@ export class AuthService {
     return accessToken;
   }
 
-
   //google api
   private oauth2Client;
 
   generateAuthUrl() {
     return this.oauth2Client.generateAuthUrl({
       access_type: 'offline',
-      scope: 'https://www.googleapis.com/auth/youtube.force-ssl'
+      scope: 'https://www.googleapis.com/auth/youtube.force-ssl',
     });
   }
 
