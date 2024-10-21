@@ -19,6 +19,15 @@ export class genSubDto {
   content_projectID: string;
 }
 
+export class genDubDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  content_projectID: string;
+  filePath: string;
+  content_language: ContentLanguage;
+}
+
 export class insertPathDto {
   @ApiProperty()
   @IsString()

@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { insertPathDto, ContentFormat, ContentLanguage } from './dto/work.dto';
 import axios from 'axios';
+import { response } from "express";
 
 @Injectable()
 export class WorkService {
@@ -82,6 +83,36 @@ export class WorkService {
       return record;
     } catch (error) {
       throw new Error(`insertPath error: ${error.message}`);
+    }
+  }
+
+  async generateDubbing(id: string, path: string, language: ContentLanguage) {
+    const workerURL = 'http://localhost:4000/generate-dubbing';
+    try {
+      const response = await axios.post(
+        workerURL,
+        { srtFilePath: path }
+        );
+
+      // Define the data object with the correct properties
+      const voiceData: any = {
+        urlId: id,
+      };
+
+      // Conditionally add either myVoice or en based on the language
+      if (language === 'kr') {
+        voiceData.myVoice = response.data;
+      } else if (language === 'en') {
+        voiceData.en = response.data;
+      }
+
+      // Create the entry in the database using Prisma
+      await this.prismaService.voice.create({
+        data: voiceData   // Ensure correct casting
+      });
+
+    } catch (error) {
+      throw new Error (error.message)
     }
   }
 }
