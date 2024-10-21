@@ -50,7 +50,7 @@ model Caption {
 
 model Voice {
   id      String  @id @default(uuid())
-  myVoice String
+  myVoice String?
   en      String?
   jp      String?
 

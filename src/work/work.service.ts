@@ -100,10 +100,10 @@ export class WorkService {
       };
 
       // Conditionally add either myVoice or en based on the language
-      if (language === 'kr') {
-        voiceData.myVoice = response.data;
-      } else if (language === 'en') {
+      if (language === 'en' && response.data) {
         voiceData.en = response.data;
+      } else if (language === 'kr' && response.data) {
+        voiceData.myVoice = response.data;
       }
 
       // Create the entry in the database using Prisma
