@@ -128,4 +128,30 @@ export class WorkService {
       throw new Error (error.message)
     }
   }
+
+  async getMP3(id: string, language: string) {
+    const workerURL = 'http://localhost:4000/files/mp3';
+    try {
+      const findVoice = await this.prismaService.voice.findUnique({
+        where: { urlId: id }
+      });
+      if (language === 'en') {
+        const path = findVoice.en;
+
+        const response = await axios.post(workerURL,
+          { filePath: path })
+        return response.data;
+      }
+      else if (language == 'kr') {
+        const path = findVoice.myVoice;
+
+        const response = await axios.post(workerURL,
+          { filePath: path })
+        return response.data;
+      }
+
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
 }

@@ -18,4 +18,9 @@ export class WorkController {
     const { content_projectID, filePath ,content_language } = dto;
     await this.workService.generateDubbing( content_projectID, filePath, content_language );
   }
+
+  @Post('mp3')
+  async getMP3(@Body('id') id: string, @Body('language') language: string) {
+    return await this.workService.getMP3(id, language);
+  }
 }
