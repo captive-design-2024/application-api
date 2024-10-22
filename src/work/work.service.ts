@@ -106,10 +106,23 @@ export class WorkService {
         voiceData.myVoice = response.data;
       }
 
-      // Create the entry in the database using Prisma
-      await this.prismaService.voice.create({
-        data: voiceData   // Ensure correct casting
+      // Check if the entry with urlId already exists
+      const existingVoice = await this.prismaService.voice.findUnique({
+        where: { urlId: id }
       });
+
+      if (existingVoice) {
+        // If exists, update the entry
+        await this.prismaService.voice.update({
+          where: { urlId: id },
+          data: voiceData
+        });
+      } else {
+        // If not, create a new entry
+        await this.prismaService.voice.create({
+          data: voiceData
+        });
+      }
 
     } catch (error) {
       throw new Error (error.message)
