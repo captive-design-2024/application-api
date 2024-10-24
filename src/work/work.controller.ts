@@ -19,6 +19,27 @@ export class WorkController {
     await this.workService.generateDubbing( content_projectID, filePath, content_language );
   }
 
+  @Post('llm-check')
+  async check(@Body('content') content: string) {
+    return await this.workService.llm_check( content );
+  }
+
+  @Post('llm-recommend')
+  async recommend(
+    @Body('content') content: string,
+    @Body('language') language: string,
+  ) {
+    return await this.workService.llm_recommend( content, language );
+  }
+
+  @Post('llm-translate')
+  async translate(
+    @Body('content') content: string,
+    @Body('language') language: string,
+  ) {
+    return await this.workService.llm_translate( content, language );
+  }
+
   @Post('mp3')
   async getMP3(@Body('id') id: string, @Body('language') language: string) {
     return await this.workService.getMP3(id, language);

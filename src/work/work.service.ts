@@ -154,4 +154,26 @@ export class WorkService {
       throw new Error(error.message)
     }
   }
+
+  async llm_check(content: string) {
+    const workerURL = 'http://host.docker.internal:4000/llm/check';
+    const response = await axios.post(workerURL, { content: content });
+    return response.data;
+  }
+
+  async llm_recommend(content: string, language: string) {
+    const workerURL = 'http://host.docker.internal:4000/llm/recommend';
+    const response = await axios.post(workerURL, {
+      content: content,
+      language: language });
+    return response.data;
+  }
+
+  async llm_translate(content: string, language: string) {
+    const workerURL = 'http://host.docker.internal:4000/llm/translate';
+    const response = await axios.post(workerURL, {
+      content: content,
+      language: language });
+    return response.data;
+  }
 }
