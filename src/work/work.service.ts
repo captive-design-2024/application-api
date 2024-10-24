@@ -152,7 +152,7 @@ export class WorkService {
   }
 
   async getMP3(id: string, language: string) {
-    const workerURL = 'http://localhost:4000/files/mp3';
+    const workerURL = 'http://host.docker.internal:4000/files/mp3';
     try {
       const findVoice = await this.prismaService.voice.findUnique({
         where: { urlId: id }
