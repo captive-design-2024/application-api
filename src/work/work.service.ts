@@ -87,7 +87,7 @@ export class WorkService {
   }
 
   async generateDubbing(id: string, path: string, language: ContentLanguage) {
-    const workerURL = 'http://localhost:4000/generate-dubbing';
+    const workerURL = 'http://host.docker.internal:4000/generate-dubbing';
     try {
       const response = await axios.post(
         workerURL,
@@ -129,6 +129,28 @@ export class WorkService {
     }
   }
 
+  async llm_check(content: string) {
+    const workerURL = 'http://host.docker.internal:4000/llm/check';
+    const response = await axios.post(workerURL, { content: content });
+    return response.data;
+  }
+
+  async llm_recommend(content: string, language: string) {
+    const workerURL = 'http://host.docker.internal:4000/llm/recommend';
+    const response = await axios.post(workerURL, {
+      content: content,
+      language: language });
+    return response.data;
+  }
+
+  async llm_translate(content: string, language: string) {
+    const workerURL = 'http://host.docker.internal:4000/llm/translate';
+    const response = await axios.post(workerURL, {
+      content: content,
+      language: language });
+    return response.data;
+  }
+
   async getMP3(id: string, language: string) {
     const workerURL = 'http://localhost:4000/files/mp3';
     try {
@@ -153,27 +175,5 @@ export class WorkService {
     } catch (error) {
       throw new Error(error.message)
     }
-  }
-
-  async llm_check(content: string) {
-    const workerURL = 'http://host.docker.internal:4000/llm/check';
-    const response = await axios.post(workerURL, { content: content });
-    return response.data;
-  }
-
-  async llm_recommend(content: string, language: string) {
-    const workerURL = 'http://host.docker.internal:4000/llm/recommend';
-    const response = await axios.post(workerURL, {
-      content: content,
-      language: language });
-    return response.data;
-  }
-
-  async llm_translate(content: string, language: string) {
-    const workerURL = 'http://host.docker.internal:4000/llm/translate';
-    const response = await axios.post(workerURL, {
-      content: content,
-      language: language });
-    return response.data;
   }
 }
