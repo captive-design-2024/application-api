@@ -11,7 +11,19 @@ export class FilesController {
   downloadFile(@Body() dto: DownloadFileDto, @Res() res: Response) {
     const { content_projectID, content_format, content_language } = dto;
 
-    this.filesService.downloadFile(
+    this.filesService.downloadSrtFile(
+      content_projectID,
+      content_format,
+      content_language,
+      res,
+    );
+  }
+
+  @Post('downloadWAV')
+  downloadWAVFile(@Body() dto: DownloadFileDto, @Res() res: Response) {
+    const { content_projectID, content_format, content_language } = dto;
+
+    this.filesService.downloadWavFile(
       content_projectID,
       content_format,
       content_language,

@@ -7,7 +7,7 @@ import axios from 'axios';
 export class FilesService {
   constructor(private prismaService: PrismaService) {}
 
-  async downloadFile(
+  async downloadSrtFile(
     project_id: string,
     format: string,
     language: string,
@@ -42,6 +42,49 @@ export class FilesService {
       res.set({
         'Content-Type': 'application/octet-stream',
         'Content-Disposition': `attachment; filename="downloaded_file.srt"`,
+      });
+      res.send(response.data);
+    } catch (error) {
+      console.error('Error in downloadFile:', error);
+      throw error;
+    }
+  }
+
+  async downloadWavFile(
+    project_id: string,
+    format: string,
+    language: string,
+    res: Response,
+  ) {
+    const workerURL = 'http://host.docker.internal:4000/files/download';
+    try {
+      const model = this.prismaService[format];
+      const record = await model.findUnique({
+        where: { urlId: project_id },
+      });
+
+      if (!record) {
+        throw new NotFoundException(
+          `No data found for project ID: ${project_id}`,
+        );
+      }
+
+      const filePath = record[language];
+      if (!filePath) {
+        throw new NotFoundException(
+          `Language property '${language}' not found`,
+        );
+      }
+
+      const response = await axios.post(
+        workerURL,
+        { path: filePath },
+        { responseType: 'arraybuffer' },
+      );
+
+      res.set({
+        'Content-Type': 'audio/wav',
+        'Content-Disposition': `attachment; filename="downloaded_file.wav"`,
       });
       res.send(response.data);
     } catch (error) {
