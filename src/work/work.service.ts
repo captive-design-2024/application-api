@@ -177,18 +177,22 @@ export class WorkService {
     }
   }
 
-  async generateljs(modelname: string, modelurl: string[], userId: string) {
+  async generateljs(modelname: string, modelurl: string[], login_id: string) {
     const workerURL = 'http://host.docker.internal:4000/generate-ljs-links';
     try {
       const response = await axios.post(workerURL,
         { links: modelurl});
 
-      this.prismaService.tTS.create({
+      const findUser = await this.prismaService.user.findUnique({
+        where: { login_id: login_id },
+      });
+
+      await this.prismaService.tTS.create({
         data: {
           name: modelname,
           model_link: modelurl,
           dataset: response.data,
-          userId: userId
+          userId: findUser.id
         }
       })
       return 'success'
@@ -197,16 +201,21 @@ export class WorkService {
     }
   }
 
-  async test(modelname: string, modelurl: string[], id: string) {
+  async test(modelname: string, modelurl: string[], login_id: string) {
     try {
-      this.prismaService.tTS.create({
+      const findUser = await this.prismaService.user.findUnique({
+        where: { login_id: login_id },
+      });
+
+      await this.prismaService.tTS.create({
         data: {
           name: modelname,
           model_link: modelurl,
           dataset: 'akgohaijweofisjl/oawhag',
-          userId: id
+          userId: findUser.id
         }
       })
+      return 'success';
     } catch (error) {
       throw new Error(error.message)
     }
