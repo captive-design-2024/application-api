@@ -181,7 +181,7 @@ export class WorkService {
     const workerURL = 'http://host.docker.internal:4000/generate-ljs-links';
     try {
       const response = await axios.post(workerURL,
-        { links: modelurl});
+        { links: modelurl });
 
       const findUser = await this.prismaService.user.findUnique({
         where: { login_id: login_id },

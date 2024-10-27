@@ -55,14 +55,16 @@ export class ProjectController2 {
 
   @Get('Edit/:id')
   @UseGuards(JwtAuthGuard)
-  async getLink(@Param('id') id: string) {
+  async getLink(@Param('id') id: string, @Req() req) {
     const response = await this.projectService.findLinkByProjectId(id);
     const videoId = this.projectService.extractVideoId(response);
+    const responseTTS = await this.projectService.findTTS(req.user.id);
 
     const srt = await this.fileService.readSRTforHome(id, 'kr');
     return {
       link: 'https://youtube.com/embed/' + videoId,
       caption: srt,
+      tts: responseTTS
     };
   }
 }

@@ -60,4 +60,18 @@ export class ProjectService {
     });
     return this.extractVideoId(project.link);
   }
+
+  async findTTS(id: string) {
+    const findUser = await this.prismaService.user.findUnique({
+      where: { login_id: id },
+    });
+    const findTTS = await this.prismaService.tTS.findMany({
+      where: { userId: findUser.id }
+    });
+    const responseData = findTTS.map(tts=>({
+      name: tts.name,
+      dataset: tts.dataset
+    }));
+    return responseData;
+  }
 }
