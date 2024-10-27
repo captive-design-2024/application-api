@@ -52,4 +52,11 @@ export class WorkController {
       const { modelname, modelurl } = dto;
       return await this.workService.generateljs(modelname, modelurl, req.user.id);
     }
+
+   @Post('test')
+   @UseGuards(JwtAuthGuard)
+  async test(@Body() dto: genModelDto, @Req() req) {
+     const { modelname, modelurl } = dto;
+     return await this.workService.test(modelname, modelurl, req.user.id);
+   }
 }

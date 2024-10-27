@@ -196,4 +196,19 @@ export class WorkService {
       throw new Error(error.message)
     }
   }
+
+  async test(modelname: string, modelurl: string[], id: string) {
+    try {
+      this.prismaService.tTS.create({
+        data: {
+          name: modelname,
+          model_link: modelurl,
+          dataset: 'akgohaijweofisjl/oawhag',
+          userId: id
+        }
+      })
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
 }
