@@ -23,6 +23,7 @@ model User {
   created_at   DateTime @default(now())
 
   projects Project[]
+  TTS      TTS[]
 }
 
 model Project {
@@ -65,4 +66,13 @@ model Result {
 
   urlId    String  @unique
   projects Project @relation(fields: [urlId], references: [id])
+}
+
+model TTS {
+  id         String   @id @default(uuid())
+  name       String
+  model_link String[]
+  dataset    String
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
 }
