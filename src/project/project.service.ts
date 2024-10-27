@@ -66,11 +66,11 @@ export class ProjectService {
       where: { login_id: id },
     });
     const findTTS = await this.prismaService.tTS.findMany({
-      where: { userId: findUser.id }
+      where: { userId: findUser.id },
     });
-    const responseData = findTTS.map(tts=>({
+    const responseData = findTTS.map((tts) => ({
       name: tts.name,
-      dataset: tts.dataset
+      dataset: tts.dataset,
     }));
     return responseData;
   }

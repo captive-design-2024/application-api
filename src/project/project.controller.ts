@@ -64,7 +64,7 @@ export class ProjectController2 {
     return {
       link: 'https://youtube.com/embed/' + videoId,
       caption: srt,
-      tts: responseTTS
+      tts: responseTTS,
     };
   }
 }

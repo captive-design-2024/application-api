@@ -140,7 +140,7 @@ export class WorkService {
   }
 
   async llm_recommend(content: string, language: string) {
-    const workerURL = 'http://host.docker.internal:4000/llm/check';
+    const workerURL = 'http://host.docker.internal:4000/llm/recommend';
     const response = await axios.post(workerURL, {
       content: content,
       language: language,
