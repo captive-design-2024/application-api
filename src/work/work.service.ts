@@ -70,11 +70,14 @@ export class WorkService {
     }
 
     try {
+      console.log("hhhh",content_projectID)
       const record = await model.upsert({
         where: { urlId: content_projectID },
         update: data,
         create: {
           urlId: content_projectID,
+          en: data.en || '',  // 빈 문자열로 기본값 설정
+          kr: data.kr || '',  // 빈 문자열로 기본값 설정
           ...data,
         },
       });
@@ -146,8 +149,8 @@ export class WorkService {
     return response.data;
   }
 
-  async llm_translate(project_id: string, content: string, language: string) {
-    const workerURL = 'http://host.docker.internal:4000/llm/check';
+  async llm_translate(project_id: string, language: string, content: string, ) {
+    const workerURL = 'http://host.docker.internal:4000/llm/translate';
     const record = await this.prismaService.caption.findUnique({
       where: { urlId: project_id },
     });

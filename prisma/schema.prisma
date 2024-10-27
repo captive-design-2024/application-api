@@ -41,7 +41,7 @@ model Project {
 
 model Caption {
   id String  @id @default(uuid())
-  kr String
+  kr String?
   en String?
   jp String?
 
