@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { insertPathDto, ContentFormat, ContentLanguage } from './dto/work.dto';
 import axios from 'axios';
-import { response } from 'express';
 
 @Injectable()
 export class WorkService {
