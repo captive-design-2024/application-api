@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { insertPathDto, ContentFormat, ContentLanguage } from './dto/work.dto';
 import axios from 'axios';
-import { response } from "express";
+import { response } from 'express';
 
 @Injectable()
 export class WorkService {
@@ -86,46 +86,35 @@ export class WorkService {
     }
   }
 
-  async generateDubbing(id: string, path: string, language: ContentLanguage) {
+  async generateDubbing(id: string) {
     const workerURL = 'http://host.docker.internal:4000/generate-dubbing';
+    const record = await this.prismaService.caption.findUnique({
+      where: { urlId: id },
+    });
     try {
-      const response = await axios.post(
-        workerURL,
-        { srtFilePath: path }
-        );
+      const response = await axios.post(workerURL, { srtFilePath: record.en });
 
-      // Define the data object with the correct properties
       const voiceData: any = {
         urlId: id,
+        en: response.data,
       };
 
-      // Conditionally add either myVoice or en based on the language
-      if (language === 'en' && response.data) {
-        voiceData.en = response.data;
-      } else if (language === 'kr' && response.data) {
-        voiceData.myVoice = response.data;
-      }
-
-      // Check if the entry with urlId already exists
       const existingVoice = await this.prismaService.voice.findUnique({
-        where: { urlId: id }
+        where: { urlId: id },
       });
 
       if (existingVoice) {
-        // If exists, update the entry
         await this.prismaService.voice.update({
           where: { urlId: id },
-          data: voiceData
+          data: voiceData,
         });
       } else {
-        // If not, create a new entry
         await this.prismaService.voice.create({
-          data: voiceData
+          data: voiceData,
         });
       }
-
     } catch (error) {
-      throw new Error (error.message)
+      throw new Error(error.message);
     }
   }
 
@@ -139,7 +128,8 @@ export class WorkService {
     const workerURL = 'http://host.docker.internal:4000/llm/recommend';
     const response = await axios.post(workerURL, {
       content: content,
-      language: language });
+      language: language,
+    });
     return response.data;
   }
 
@@ -147,7 +137,8 @@ export class WorkService {
     const workerURL = 'http://host.docker.internal:4000/llm/translate';
     const response = await axios.post(workerURL, {
       content: content,
-      language: language });
+      language: language,
+    });
     return response.data;
   }
 
@@ -155,33 +146,28 @@ export class WorkService {
     const workerURL = 'http://host.docker.internal:4000/files/mp3';
     try {
       const findVoice = await this.prismaService.voice.findUnique({
-        where: { urlId: id }
+        where: { urlId: id },
       });
       if (language === 'en') {
         const path = findVoice.en;
 
-        const response = await axios.post(workerURL,
-          { filePath: path })
+        const response = await axios.post(workerURL, { filePath: path });
         return response.data;
-      }
-      else if (language == 'kr') {
+      } else if (language == 'kr') {
         const path = findVoice.myVoice;
 
-        const response = await axios.post(workerURL,
-          { filePath: path })
+        const response = await axios.post(workerURL, { filePath: path });
         return response.data;
       }
-
     } catch (error) {
-      throw new Error(error.message)
+      throw new Error(error.message);
     }
   }
 
   async generateljs(modelname: string, modelurl: string[], login_id: string) {
     const workerURL = 'http://host.docker.internal:4000/generate-ljs-links';
     try {
-      const response = await axios.post(workerURL,
-        { links: modelurl });
+      const response = await axios.post(workerURL, { links: modelurl });
 
       const findUser = await this.prismaService.user.findUnique({
         where: { login_id: login_id },
@@ -192,12 +178,12 @@ export class WorkService {
           name: modelname,
           model_link: modelurl,
           dataset: response.data,
-          userId: findUser.id
-        }
-      })
-      return 'success'
+          userId: findUser.id,
+        },
+      });
+      return 'success';
     } catch (error) {
-      throw new Error(error.message)
+      throw new Error(error.message);
     }
   }
 
@@ -212,12 +198,12 @@ export class WorkService {
           name: modelname,
           model_link: modelurl,
           dataset: 'akgohaijweofisjl/oawhag',
-          userId: findUser.id
-        }
-      })
+          userId: findUser.id,
+        },
+      });
       return 'success';
     } catch (error) {
-      throw new Error(error.message)
+      throw new Error(error.message);
     }
   }
 }

@@ -1,8 +1,8 @@
-import { Controller, Req, UseGuards } from "@nestjs/common";
+import { Controller, Req, UseGuards } from '@nestjs/common';
 import { Post, Body } from '@nestjs/common';
 import { WorkService } from './work.service';
-import { genDubDto, genModelDto, genSubDto } from "./dto/work.dto";
-import { JwtAuthGuard } from "../auth/guard/jwt.guard";
+import { genDubDto, genModelDto, genSubDto } from './dto/work.dto';
+import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 
 @Controller('work')
 export class WorkController {
@@ -16,13 +16,13 @@ export class WorkController {
 
   @Post('generateDubbing')
   async gnerateDubbing(@Body() dto: genDubDto): Promise<void> {
-    const { content_projectID, filePath ,content_language } = dto;
-    await this.workService.generateDubbing( content_projectID, filePath, content_language );
+    const { content_projectID } = dto;
+    await this.workService.generateDubbing(content_projectID);
   }
 
   @Post('llm-check')
   async check(@Body('content') content: string) {
-    return await this.workService.llm_check( content );
+    return await this.workService.llm_check(content);
   }
 
   @Post('llm-recommend')
@@ -30,7 +30,7 @@ export class WorkController {
     @Body('content') content: string,
     @Body('language') language: string,
   ) {
-    return await this.workService.llm_recommend( content, language );
+    return await this.workService.llm_recommend(content, language);
   }
 
   @Post('llm-translate')
@@ -38,7 +38,7 @@ export class WorkController {
     @Body('content') content: string,
     @Body('language') language: string,
   ) {
-    return await this.workService.llm_translate( content, language );
+    return await this.workService.llm_translate(content, language);
   }
 
   @Post('mp3')
@@ -48,15 +48,15 @@ export class WorkController {
 
   @Post('generate-ljs')
   @UseGuards(JwtAuthGuard)
-    async generateModel(@Body() dto: genModelDto, @Req() req) {
-      const { modelname, modelurl } = dto;
-      return await this.workService.generateljs(modelname, modelurl, req.user.id);
-    }
+  async generateModel(@Body() dto: genModelDto, @Req() req) {
+    const { modelname, modelurl } = dto;
+    return await this.workService.generateljs(modelname, modelurl, req.user.id);
+  }
 
-   @Post('test')
-   @UseGuards(JwtAuthGuard)
+  @Post('test')
+  @UseGuards(JwtAuthGuard)
   async test(@Body() dto: genModelDto, @Req() req) {
-     const { modelname, modelurl } = dto;
-     return await this.workService.test(modelname, modelurl, req.user.id);
-   }
+    const { modelname, modelurl } = dto;
+    return await this.workService.test(modelname, modelurl, req.user.id);
+  }
 }

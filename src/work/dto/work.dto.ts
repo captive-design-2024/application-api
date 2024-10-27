@@ -24,8 +24,6 @@ export class genDubDto {
   @IsString()
   @IsNotEmpty()
   content_projectID: string;
-  filePath: string;
-  content_language: ContentLanguage;
 }
 
 export class insertPathDto {
@@ -54,8 +52,8 @@ export class genModelDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  modelname: string
+  modelname: string;
 
   @ApiProperty()
-  modelurl: string[]
+  modelurl: string[];
 }
