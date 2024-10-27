@@ -1,7 +1,7 @@
 import { Controller, Req, UseGuards } from '@nestjs/common';
 import { Post, Body } from '@nestjs/common';
 import { WorkService } from './work.service';
-import { genDubDto, genModelDto, genSubDto } from './dto/work.dto';
+import { genDubDto, genModelDto, genSubDto, genSrtDto } from './dto/work.dto';
 import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 
 @Controller('work')
@@ -21,8 +21,13 @@ export class WorkController {
   }
 
   @Post('llm-check')
-  async check(@Body('content') content: string) {
-    return await this.workService.llm_check(content);
+  async check(@Body() dto: genSrtDto): Promise<void> {
+    const { content_projectID, content_language, content } = dto;
+    return await this.workService.llm_check(
+      content_projectID,
+      content_language,
+      content,
+    );
   }
 
   @Post('llm-recommend')
@@ -34,16 +39,13 @@ export class WorkController {
   }
 
   @Post('llm-translate')
-  async translate(
-    @Body('content') content: string,
-    @Body('language') language: string,
-  ) {
-    return await this.workService.llm_translate(content, language);
-  }
-
-  @Post('mp3')
-  async getMP3(@Body('id') id: string, @Body('language') language: string) {
-    return await this.workService.getMP3(id, language);
+  async translate(@Body() dto: genSrtDto): Promise<void> {
+    const { content_projectID, content_language, content } = dto;
+    return await this.workService.llm_translate(
+      content_projectID,
+      content_language,
+      content,
+    );
   }
 
   @Post('generate-ljs')

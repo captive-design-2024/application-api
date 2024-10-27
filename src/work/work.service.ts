@@ -117,14 +117,28 @@ export class WorkService {
     }
   }
 
-  async llm_check(content: string) {
+  async llm_check(project_id: string, content: string, language: string) {
     const workerURL = 'http://host.docker.internal:4000/llm/check';
-    const response = await axios.post(workerURL, { content: content });
+    const record = await this.prismaService.caption.findUnique({
+      where: { urlId: project_id },
+    });
+    const response = await axios.post(workerURL, {
+      content: content,
+      language: language,
+      filename: record.kr,
+    });
+    const insertDto: insertPathDto = {
+      content_projectID: project_id,
+      content_format: ContentFormat.caption,
+      content_language: ContentLanguage.kr,
+      content_path: response.data,
+    };
+    await this.insertPath(insertDto);
     return response.data;
   }
 
   async llm_recommend(content: string, language: string) {
-    const workerURL = 'http://host.docker.internal:4000/llm/recommend';
+    const workerURL = 'http://host.docker.internal:4000/llm/check';
     const response = await axios.post(workerURL, {
       content: content,
       language: language,
@@ -132,35 +146,24 @@ export class WorkService {
     return response.data;
   }
 
-  async llm_translate(content: string, language: string) {
-    const workerURL = 'http://host.docker.internal:4000/llm/translate';
+  async llm_translate(project_id: string, content: string, language: string) {
+    const workerURL = 'http://host.docker.internal:4000/llm/check';
+    const record = await this.prismaService.caption.findUnique({
+      where: { urlId: project_id },
+    });
     const response = await axios.post(workerURL, {
       content: content,
       language: language,
+      filename: record.kr,
     });
+    const insertDto: insertPathDto = {
+      content_projectID: project_id,
+      content_format: ContentFormat.caption,
+      content_language: ContentLanguage.en, //나중에 여러 언어로 수정할 수 있게 수정
+      content_path: response.data,
+    };
+    await this.insertPath(insertDto);
     return response.data;
-  }
-
-  async getMP3(id: string, language: string) {
-    const workerURL = 'http://host.docker.internal:4000/files/mp3';
-    try {
-      const findVoice = await this.prismaService.voice.findUnique({
-        where: { urlId: id },
-      });
-      if (language === 'en') {
-        const path = findVoice.en;
-
-        const response = await axios.post(workerURL, { filePath: path });
-        return response.data;
-      } else if (language == 'kr') {
-        const path = findVoice.myVoice;
-
-        const response = await axios.post(workerURL, { filePath: path });
-        return response.data;
-      }
-    } catch (error) {
-      throw new Error(error.message);
-    }
   }
 
   async generateljs(modelname: string, modelurl: string[], login_id: string) {

@@ -26,6 +26,23 @@ export class genDubDto {
   content_projectID: string;
 }
 
+export class genSrtDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  content_projectID: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  content_language: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  content: string;
+}
+
 export class insertPathDto {
   @ApiProperty()
   @IsString()
