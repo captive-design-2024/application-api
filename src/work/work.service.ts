@@ -176,4 +176,24 @@ export class WorkService {
       throw new Error(error.message)
     }
   }
+
+  async generateljs(modelname: string, modelurl: string[], userId: string) {
+    const workerURL = 'http://host.docker.internal:4000/generate-ljs-links';
+    try {
+      const response = await axios.post(workerURL,
+        { links: modelurl});
+
+      this.prismaService.tTS.create({
+        data: {
+          name: modelname,
+          model_link: modelurl,
+          dataset: response.data,
+          userId: userId
+        }
+      })
+      return 'success'
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
 }

@@ -49,3 +49,13 @@ export class insertPathDto {
   @IsNotEmpty()
   content_path: string;
 }
+
+export class genModelDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  modelname: string
+
+  @ApiProperty()
+  modelurl: string[]
+}

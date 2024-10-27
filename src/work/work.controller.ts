@@ -1,7 +1,8 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Req, UseGuards } from "@nestjs/common";
 import { Post, Body } from '@nestjs/common';
 import { WorkService } from './work.service';
-import { genDubDto, genSubDto } from "./dto/work.dto";
+import { genDubDto, genModelDto, genSubDto } from "./dto/work.dto";
+import { JwtAuthGuard } from "../auth/guard/jwt.guard";
 
 @Controller('work')
 export class WorkController {
@@ -44,4 +45,11 @@ export class WorkController {
   async getMP3(@Body('id') id: string, @Body('language') language: string) {
     return await this.workService.getMP3(id, language);
   }
+
+  @Post('generate-ljs')
+  @UseGuards(JwtAuthGuard)
+    async generateModel(@Body() dto: genModelDto, @Req() req) {
+      const { modelname, modelurl } = dto;
+      return await this.workService.generateljs(modelname, modelurl, req.user.id);
+    }
 }
