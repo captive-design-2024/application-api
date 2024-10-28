@@ -161,7 +161,7 @@ export class WorkService {
     const insertDto: insertPathDto = {
       content_projectID: project_id,
       content_format: ContentFormat.caption,
-      content_language: ContentLanguage.en, //나중에 여러 언어로 수정할 수 있게 수정
+      content_language: language as ContentLanguage,
       content_path: response.data,
     };
     await this.insertPath(insertDto);

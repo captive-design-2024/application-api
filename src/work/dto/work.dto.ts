@@ -10,6 +10,8 @@ export enum ContentLanguage {
   kr = 'kr',
   en = 'en',
   jp = 'jp',
+  es = 'es',
+  de = 'de'
 }
 
 export class genSubDto {

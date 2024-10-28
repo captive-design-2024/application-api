@@ -44,6 +44,8 @@ model Caption {
   kr String?
   en String?
   jp String?
+  es String?
+  de String?
 
   urlId    String  @unique
   projects Project @relation(fields: [urlId], references: [id], onDelete: Cascade)
