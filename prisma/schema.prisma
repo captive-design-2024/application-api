@@ -55,7 +55,6 @@ model Voice {
   id      String  @id @default(uuid())
   myVoice String?
   en      String?
-  jp      String?
 
   urlId    String  @unique
   projects Project @relation(fields: [urlId], references: [id])
