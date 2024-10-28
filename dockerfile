@@ -8,4 +8,4 @@ RUN yarn install
 
 EXPOSE 3000
 
-CMD bash -c "npx prisma db push && yarn start:dev"
+CMD bash -c "npx prisma db push && yarn start"
