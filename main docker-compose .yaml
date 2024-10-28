@@ -3,11 +3,11 @@ services:
     image: postgres:16.2-alpine
     restart: always
     ports:
-      - "5432:5432"
+      - '5432:5432'
     environment:
-      - "POSTGRES_PASSWORD=pw"
-      - "POSTGRES_DB=postdb"
-      - "TZ=Asia/Seoul"
+      - 'POSTGRES_PASSWORD=pw'
+      - 'POSTGRES_DB=postdb'
+      - 'TZ=Asia/Seoul'
     networks:
       - dbcon
 
@@ -20,45 +20,46 @@ services:
     depends_on:
       - db
     ports:
-      - "3000:3000"
+      - '3000:3000'
     restart: always
     networks:
       - dbcon
-    command: ["bash", "-c", "npx prisma db push && yarn start"]
+    command: ['bash', '-c', 'npx prisma db push && yarn start']
 
   worker:
     build:
       context: ./worker-api
       dockerfile: ./Dockerfile
     ports:
-      - "4000:4000"
+      - '4000:4000'
     restart: always
     networks:
       - dbcon
-    command: ["bash", "-c", "yarn start"]
+    command: ['bash', '-c', 'yarn start']
 
   tts:
     build:
       context: ./inference-api
       dockerfile: ./Dockerfile
     ports:
-      - "4500:4500"
+      - '4500:4500'
     restart: always
     networks:
       - dbcon
-    command: ["python", "main.py"]
+    command: ['python', 'main.py']
 
   front:
     build:
       context: ./capstoneFront
       dockerfile: ./Dockerfile
     ports:
-      - "3001:3001"
+      - '3001:3001'
     restart: always
     networks:
       - dbcon
-    command: ["bash", "-c", "yarn start"]
+    command: ['bash', '-c', 'yarn start']
 
 networks:
   dbcon:
     driver: bridge
+#git clone https://github.com/captive-design-2024/application-api.git https://github.com/captive-design-2024/worker-api.git https://github.com/captive-design-2024/inference-api.git https://github.com/captive-design-2024/capstoneFront.git
