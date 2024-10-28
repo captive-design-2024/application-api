@@ -50,7 +50,7 @@ export class WorkService {
       content_language,
       content_path,
     } = dto;
-
+    console.log('test 2 Insert Path DTO:', dto);
     let model;
     const data: { [key: string]: string } = {};
 
@@ -158,6 +158,7 @@ export class WorkService {
       language: language,
       filename: record.kr,
     });
+    console.log('test 1 :', response.data);
     const insertDto: insertPathDto = {
       content_projectID: project_id,
       content_format: ContentFormat.caption,
