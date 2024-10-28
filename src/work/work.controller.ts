@@ -20,6 +20,12 @@ export class WorkController {
     await this.workService.generateDubbing(content_projectID);
   }
 
+  @Post('generateVCDubbing')
+  async gnerateVCDubbing(@Body() dto: genDubDto): Promise<void> {
+    const { content_projectID } = dto;
+    await this.workService.generateVCDubbing(content_projectID);
+  }
+
   @Post('llm-check')
   async check(@Body() dto: genSrtDto): Promise<void> {
     const { content_projectID, content_language, content } = dto;

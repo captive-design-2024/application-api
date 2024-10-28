@@ -50,7 +50,6 @@ export class WorkService {
       content_language,
       content_path,
     } = dto;
-    console.log('test 2 Insert Path DTO:', dto);
     let model;
     const data: { [key: string]: string } = {};
 
@@ -89,6 +88,38 @@ export class WorkService {
 
   async generateDubbing(id: string) {
     const workerURL = 'http://host.docker.internal:4000/generate-dubbing';
+    const record = await this.prismaService.caption.findUnique({
+      where: { urlId: id },
+    });
+    try {
+      const response = await axios.post(workerURL, { srtFilePath: record.en });
+
+      const voiceData: any = {
+        urlId: id,
+        en: response.data,
+      };
+
+      const existingVoice = await this.prismaService.voice.findUnique({
+        where: { urlId: id },
+      });
+
+      if (existingVoice) {
+        await this.prismaService.voice.update({
+          where: { urlId: id },
+          data: voiceData,
+        });
+      } else {
+        await this.prismaService.voice.create({
+          data: voiceData,
+        });
+      }
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async generateVCDubbing(id: string) {
+    const workerURL = 'http://host.docker.internal:4000/generate-vc-dubbing';
     const record = await this.prismaService.caption.findUnique({
       where: { urlId: id },
     });
@@ -158,7 +189,6 @@ export class WorkService {
       language: language,
       filename: record.kr,
     });
-    console.log('test 1 :', response.data);
     const insertDto: insertPathDto = {
       content_projectID: project_id,
       content_format: ContentFormat.caption,
