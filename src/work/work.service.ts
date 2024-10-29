@@ -157,7 +157,7 @@ export class WorkService {
     });
     const response = await axios.post(workerURL, {
       content: content,
-      language: language,
+      language: this.noremalize_lang(language),
       filename: record.kr,
     });
     const insertDto: insertPathDto = {
@@ -174,7 +174,7 @@ export class WorkService {
     const workerURL = 'http://host.docker.internal:4000/llm/recommend';
     const response = await axios.post(workerURL, {
       content: content,
-      language: language,
+      language: this.noremalize_lang(language),
     });
     return response.data;
   }
@@ -186,7 +186,7 @@ export class WorkService {
     });
     const response = await axios.post(workerURL, {
       content: content,
-      language: language,
+      language: this.noremalize_lang(language),
       filename: record.kr,
     });
     const insertDto: insertPathDto = {
@@ -219,6 +219,27 @@ export class WorkService {
       return 'success';
     } catch (error) {
       throw new Error(error.message);
+    }
+  }
+
+  async noremalize_lang(language: string): Promise<string> {
+    switch (language) {
+      case 'en':
+        return '영어';
+      case 'ko':
+        return '한국어';
+      case 'kr':
+        return '한국어';
+      case 'es':
+        return '스페인어';
+      case 'fr':
+        return '프랑스어';
+      case 'de':
+        return '독일어';
+      case 'ja':
+        return '일본어';
+      default:
+        throw new Error(`Unsupported language: ${language}`);
     }
   }
 
