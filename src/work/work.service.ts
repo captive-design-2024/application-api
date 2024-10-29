@@ -225,19 +225,19 @@ export class WorkService {
   async noremalize_lang(language: string): Promise<string> {
     switch (language) {
       case 'en':
-        return '영어';
+        return 'english';
       case 'ko':
-        return '한국어';
+        return 'korean';
       case 'kr':
-        return '한국어';
+        return 'korean';
       case 'es':
-        return '스페인어';
+        return 'espanol';
       case 'fr':
-        return '프랑스어';
+        return 'french';
       case 'de':
-        return '독일어';
+        return 'deutch';
       case 'ja':
-        return '일본어';
+        return 'japanese';
       default:
         throw new Error(`Unsupported language: ${language}`);
     }
