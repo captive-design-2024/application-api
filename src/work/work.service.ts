@@ -152,12 +152,13 @@ export class WorkService {
 
   async llm_check(project_id: string, language: string, content: string) {
     const workerURL = 'http://host.docker.internal:4000/llm/check';
+    const n_lang = this.normalize_lang(language);
     const record = await this.prismaService.caption.findUnique({
       where: { urlId: project_id },
     });
     const response = await axios.post(workerURL, {
       content: content,
-      language: this.noremalize_lang(language),
+      language: n_lang,
       filename: record.kr,
     });
     const insertDto: insertPathDto = {
@@ -172,21 +173,23 @@ export class WorkService {
 
   async llm_recommend(content: string, language: string) {
     const workerURL = 'http://host.docker.internal:4000/llm/recommend';
+    const n_lang = this.normalize_lang(language);
     const response = await axios.post(workerURL, {
       content: content,
-      language: this.noremalize_lang(language),
+      language: n_lang,
     });
     return response.data;
   }
 
   async llm_translate(project_id: string, language: string, content: string) {
     const workerURL = 'http://host.docker.internal:4000/llm/translate';
+    const n_lang = this.normalize_lang(language);
     const record = await this.prismaService.caption.findUnique({
       where: { urlId: project_id },
     });
     const response = await axios.post(workerURL, {
       content: content,
-      language: this.noremalize_lang(language),
+      language: n_lang,
       filename: record.kr,
     });
     const insertDto: insertPathDto = {
@@ -222,7 +225,7 @@ export class WorkService {
     }
   }
 
-  async noremalize_lang(language: string): Promise<string> {
+  async normalize_lang(language: string): Promise<string> {
     switch (language) {
       case 'en':
         return 'english';
