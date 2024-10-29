@@ -24,7 +24,7 @@ export class YoutubeService {
         snippet: {
           videoId: videoId,
           language: language,
-          name: 'Korean Caption',
+          name:  language + ' Caption',
         },
       },
       media: {
